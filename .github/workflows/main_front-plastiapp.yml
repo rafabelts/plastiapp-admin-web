@@ -24,7 +24,7 @@ jobs:
       - name: Install dependencies and build
         run: |
           npm install
-          npm build
+          npm run build
 
       # ⬇️ ESTO ES CLAVE PARA STANDALONE EN AZURE
       - name: Copy static files into standalone
