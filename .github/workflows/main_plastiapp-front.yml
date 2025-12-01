@@ -1,4 +1,4 @@
-name: Build and deploy Node.js app to Azure Web App - plastiapp-front
+name: Build and deploy Next.js standalone app to Azure Web App - plastiapp-front
 
 on:
   push:
@@ -20,27 +20,35 @@ jobs:
         with:
           version: 9
 
-      - name: Set up Node.js version
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: '22.x'
           cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build
+      - name: Build Next.js
         run: pnpm run build
 
-      - name: Update standalone package.json start script
+      - name: Prepare standalone package
         run: |
-          node -e "const fs = require('fs'); const pkg = require('./.next/standalone/package.json'); pkg.scripts.start = 'node server.js'; fs.writeFileSync('./.next/standalone/package.json', JSON.stringify(pkg, null, 2));"
+          rm -rf deploy || true
+          mkdir -p deploy
+          # Copy the standalone output
+          cp -r .next/standalone/* deploy/
+          # Ensure static files are available under deploy/.next/static
+          mkdir -p deploy/.next
+          cp -r .next/static deploy/.next/
+          # public if needed
+          cp -r public deploy/ || true
 
-      - name: Upload artifact for deployment job
+      - name: Upload artifact for deployment
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: .next/standalone
+          path: deploy
 
   deploy:
     runs-on: ubuntu-latest
@@ -50,11 +58,11 @@ jobs:
       contents: read
 
     steps:
-      - name: Download artifact from build job
+      - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: node-app
-      
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -62,8 +70,7 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_7AAD00D505FA407197D97030864439FA }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_94F3E8D2F35E46B7A757AA939609D1D3 }}
 
-      - name: 'Deploy to Azure Web App'
-        id: deploy-to-webapp
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'plastiapp-front'
