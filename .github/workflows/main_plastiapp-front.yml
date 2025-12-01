@@ -31,10 +31,17 @@ jobs:
           rm -rf deploy || true
           mkdir -p deploy
 
-          # Copiar servidor standalone (usando . para incluir .next y otros ocultos)
-          cp -r .next/standalone/. deploy/
+          # Copiar archivos base explícitamente
+          cp .next/standalone/server.js deploy/
+          cp .next/standalone/package.json deploy/
 
-          # Copiar carpeta static (necesaria para que funcione el CSS y JS)
+          # Copiar carpeta .next generada en standalone
+          cp -r .next/standalone/.next deploy/
+
+          # Copiar node_modules
+          cp -r .next/standalone/node_modules deploy/
+
+          # Copiar carpeta static (necesaria para assets)
           mkdir -p deploy/.next/static
           cp -r .next/static/. deploy/.next/static/
 
