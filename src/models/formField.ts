@@ -4,5 +4,5 @@ export type FormFieldConfig<T> = {
     id: string;
     type: string;
     placeholder: string;
-    options?: { id: number; name: string }[];
+    options?: { id: number | string; name: string }[];
 };

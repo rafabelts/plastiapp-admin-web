@@ -20,14 +20,14 @@ import {
 } from "@/src/components/ui/popover"
 
 type BaseOption = {
-    id: number
+    id: number | string
     name: string
 }
 
 type ComboboxProps<T extends BaseOption> = {
     elements: T[]
-    value: number | null | undefined
-    onChange: (value: number | null) => void
+    value: number | string | null | undefined
+    onChange: (value: number | string | null) => void
 }
 
 export function Combobox<T extends BaseOption>({
@@ -41,7 +41,7 @@ export function Combobox<T extends BaseOption>({
     const selected =
         elements.find((el) => el.id == value) || null
 
-    const handleSelect = (id: number) => {
+    const handleSelect = (id: number | string) => {
         onChange(id)
         setOpen(false)
     }
