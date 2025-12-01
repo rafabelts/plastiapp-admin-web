@@ -30,9 +30,14 @@ jobs:
         run: |
           rm -rf deploy || true
           mkdir -p deploy
+
+          # Copiar servidor standalone
           cp -r .next/standalone/* deploy/
-          mkdir -p deploy/.next
-          cp -r .next/static deploy/.next/
+
+          # Copiar carpeta .next COMPLETA requerida por Next 16
+          cp -r .next deploy/.next
+
+          # Copiar public
           cp -r public deploy/ || true
 
       - name: Upload artifact for deployment
