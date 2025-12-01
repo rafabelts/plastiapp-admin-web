@@ -1,4 +1,5 @@
 "use client";
+import { toast } from "sonner";
 import { Button } from "@/src/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src/components/ui/card";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/src/components/ui/field";
@@ -30,7 +31,7 @@ export default function AuthPage() {
       await login(data.email, data.password);
       router.replace("/")
     } catch (e) {
-      console.error(e)
+      toast.error(e instanceof Error ? e.message : "Ocurrió un error al iniciar sesión")
     }
   };
 

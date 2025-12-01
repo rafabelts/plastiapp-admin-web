@@ -2,9 +2,6 @@
   "name": "new-admin",
   "version": "0.1.0",
   "private": true,
-  "engines": {
-    "node": "20"
-  },
   "scripts": {
     "dev": "next dev",
     "build": "next build && cp -r .next/static .next/standalone/.next/ && cp -r public .next/standalone/",
