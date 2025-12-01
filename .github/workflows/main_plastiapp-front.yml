@@ -32,6 +32,10 @@ jobs:
       - name: Build
         run: pnpm run build
 
+      - name: Update standalone package.json start script
+        run: |
+          node -e "const fs = require('fs'); const pkg = require('./.next/standalone/package.json'); pkg.scripts.start = 'node server.js'; fs.writeFileSync('./.next/standalone/package.json', JSON.stringify(pkg, null, 2));"
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
