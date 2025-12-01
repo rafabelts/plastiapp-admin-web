@@ -20,15 +20,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: "pnpm"
-
-      - name: Install pnpm
-        run: npm install -g pnpm
 
       - name: Install dependencies and build
         run: |
-          pnpm install
-          pnpm build
+          npm install
+          npm build
 
       # ⬇️ ESTO ES CLAVE PARA STANDALONE EN AZURE
       - name: Copy static files into standalone
